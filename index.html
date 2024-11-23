@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Laman Web</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        #chat-container {
+            width: 100%;
+            max-width: 600px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        #messages {
+            height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+        #message-input {
+            width: 80%;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        #send-button {
+            width: 15%;
+            padding: 10px;
+            margin-left: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #send-button:hover {
+            background-color: #45a049;
+        }
+        .message {
+            padding: 10px;
+            margin: 5px 0;
+            background-color: #e9e9e9;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="chat-container">
+        <h2>Chat Laman Web</h2>
+        <div id="messages"></div>
+        <input type="text" id="message-input" placeholder="Tulis mesej...">
+        <button id="send-button">Hantar</button>
+    </div>
+
+    <script>
+        const sendButton = document.getElementById('send-button');
+        const messageInput = document.getElementById('message-input');
+        const messagesDiv = document.getElementById('messages');
+
+        // Fungsi untuk menambah mesej ke dalam chat
+        function addMessage(message) {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message');
+            messageElement.textContent = message;
+            messagesDiv.appendChild(messageElement);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight; // Scroll ke mesej terbaru
+        }
+
+        // Memuatkan mesej yang disimpan dalam LocalStorage
+        function loadMessages() {
+            const storedMessages = JSON.parse(localStorage.getItem('messages')) || [];
+            storedMessages.forEach(message => addMessage(message));
+        }
+
+        // Menyimpan mesej dalam LocalStorage
+        function saveMessage(message) {
+            const storedMessages = JSON.parse(localStorage.getItem('messages')) || [];
+            storedMessages.push(message);
+            localStorage.setItem('messages', JSON.stringify(storedMessages));
+        }
+
+        // Apabila klik butang Hantar
+        sendButton.onclick = () => {
+            const message = messageInput.value.trim();
+            if (message) {
+                addMessage(`Anda: ${message}`);
+                saveMessage(`Anda: ${message}`); // Simpan mesej
+                messageInput.value = ''; // Kosongkan input
+            }
+        };
+
+        // Apabila tekan Enter
+        messageInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                const message = messageInput.value.trim();
+                if (message) {
+                    addMessage(`Anda: ${message}`);
+                    saveMessage(`Anda: ${message}`); // Simpan mesej
+                    messageInput.value = ''; // Kosongkan input
+                }
+            }
+        });
+
+        // Muatkan mesej semasa halaman dimuat
+        loadMessages();
+    </script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
